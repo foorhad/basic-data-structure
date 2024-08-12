@@ -1,107 +1,108 @@
-#include <iostream>  // Input/output streams (cin, cout, cerr, etc.)
-#include <fstream>   // File streams (for file input/output)
-#include <iomanip>   // Input/output manipulators (for formatting)
-#include <string>    // String manipulation
-#include <vector>    // Dynamic arrays
-#include <list>      // Doubly linked list
-#include <queue>     // Queue data structure
-#include <stack>     // Stack data structure
-#include <map>       // Associative array (key-value pairs)
-#include <set>       // Set data structure
-#include <algorithm> // Standard algorithms (sorting, searching, etc.)
-#include <cmath>     // Mathematical functions
-#include <ctime>     // Date and time functions
-#include <cstdlib>   // Standard library utilities (includes functions like `rand()` and `exit()`)
-#include <cstring>   // C-style string functions
-#include <cassert>   // Assertions
+#include <iostream>     // Input/output streams (cin, cout, cerr, etc.)
+#include <fstream>      // File streams (for file input/output)
+#include <iomanip>      // Input/output manipulators (for formatting)
+#include <string>       // String manipulation
+#include <vector>       // Dynamic arrays
+#include <list>         // Doubly linked list
+#include <queue>        // Queue data structure
+#include <stack>        // Stack data structure
+#include <map>          // Associative array (key-value pairs)
+#include <set>          // Set data structure
+#include <algorithm>    // Standard algorithms (sorting, searching, etc.)
+#include <cmath>        // Mathematical functions
+#include <ctime>        // Date and time functions
+#include <cstdlib>      // Standard library utilities (includes functions like `rand()` and `exit()`)
+#include <cstring>      // C-style string functions
+#include <cassert>      // Assertions
 #include <utility>
 #include <limits.h>
-
+ 
 using namespace std;
 class Node
 {
 public:
     int val;
     Node *next;
+    Node *prev;
 
     Node(int val)
     {
         this->val = val;
         this->next = NULL;
+        this->prev = NULL;
     }
 };
-void insert_value(Node *&head, int val)
+int sz=0;
+void insert_tail(int val, Node* &head,Node* &tail) //O(1)
 {
-    Node *newnode = new Node(val);
-    if (head == NULL)
-    {
-        head = newnode;
+    sz++;
+    Node *newNode=new Node(val);
+    if(head == NULL){
+        head = newNode;
+        tail=newNode;
         return;
     }
-    Node *tmp = head;
-    while (tmp->next != NULL)
-    {
-        tmp = tmp->next;
-    }
-    tmp->next = newnode;
+    tail->next=newNode;
+    tail = newNode;
 }
-void print_list(Node *head)
-{
-    Node *tmp = head;
-    while (tmp != NULL)
-    {
-        cout << tmp->val << " ";
-        tmp = tmp->next;
+void insertAnypos(int data,int pos,Node *&head,Node* &tail){
+    sz++;
+    Node *newNode = new Node(data);
+    if(pos == 0){
+        newNode->next=head;
+        head = newNode;
     }
-    cout << endl;
-}
-void insert_at_any_pos(Node *&head, int pos, int val)
-{
-    Node *newnode = new Node(val);
-    if (pos == 0)
+    else if (pos==sz)
     {
-        newnode->next = head;
-        head = newnode;
-        print_list(head);
-        return;
+        tail->next=newNode;
+        tail=newNode;
     }
-
-    Node *tmp = head;
-    for (int i = 1; i < pos; i++)
+    else
     {
-        tmp = tmp->next;
-        if (tmp == NULL)
+        Node *temp = head;
+        for (int i = 1; i < pos; i++)
         {
-            cout << "Invalid" << endl;
-            return;
+            temp=temp->next; //update
         }
+        newNode->next=temp->next;
+        temp->next=newNode;    
     }
-    newnode->next = tmp->next;
-    tmp->next = newnode;
-    print_list(head);
+}
+void print(Node *head)
+{
+    Node *temp = head;
+    while (temp != NULL)
+    {
+        cout<<temp->val<<" ";
+        temp=temp->next;
+    }  
 }
 
 int main()
 {
     Node *head = NULL;
-    int val;
+    Node *tail = NULL;
     while (1)
     {
-        cin >> val;
-        if (val == -1)
-        {
-            break;
-        }
-        insert_value(head, val);
+        int n;cin>>n;
+        if(n==-1)break;
+        insert_tail(n,head,tail);
     }
-    int q;
-    cin >> q;
+    int q;cin>>q;
     while (q--)
     {
-        int pos, val;
-        cin >> pos >> val;
-        insert_at_any_pos(head, pos, val);
+        int index,value;
+        cin>>index>>value;
+        if(index > sz)cout<<"Invalid"<<endl;
+        else
+        {
+            insertAnypos(value,index,head,tail);
+            print(head);cout<<endl;
+        }
+       
     }
-
+    
+    
+    
     return 0;
 }
