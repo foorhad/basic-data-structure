@@ -1,23 +1,23 @@
-#include <iostream>  // Input/output streams (cin, cout, cerr, etc.)
-#include <fstream>   // File streams (for file input/output)
-#include <iomanip>   // Input/output manipulators (for formatting)
-#include <string>    // String manipulation
-#include <vector>    // Dynamic arrays
-#include <list>      // Doubly linked list
-#include <queue>     // Queue data structure
-#include <stack>     // Stack data structure
-#include <map>       // Associative array (key-value pairs)
-#include <set>       // Set data structure
-#include <algorithm> // Standard algorithms (sorting, searching, etc.)
-#include <cmath>     // Mathematical functions
-#include <ctime>     // Date and time functions
-#include <cstdlib>   // Standard library utilities (includes functions like `rand()` and `exit()`)
-#include <cstring>   // C-style string functions
-#include <cassert>   // Assertions
+#include <iostream>     // Input/output streams (cin, cout, cerr, etc.)
+#include <fstream>      // File streams (for file input/output)
+#include <iomanip>      // Input/output manipulators (for formatting)
+#include <string>       // String manipulation
+#include <vector>       // Dynamic arrays
+#include <list>         // Doubly linked list
+#include <queue>        // Queue data structure
+#include <stack>        // Stack data structure
+#include <map>          // Associative array (key-value pairs)
+#include <set>          // Set data structure
+#include <algorithm>    // Standard algorithms (sorting, searching, etc.)
+#include <cmath>        // Mathematical functions
+#include <ctime>        // Date and time functions
+#include <cstdlib>      // Standard library utilities (includes functions like `rand()` and `exit()`)
+#include <cstring>      // C-style string functions
+#include <cassert>      // Assertions
 #include <utility>
 #include <limits.h>
+ 
 using namespace std;
-
 class Node
 {
 public:
@@ -30,65 +30,50 @@ public:
         this->next = NULL;
     }
 };
-
-void insert_value(Node *&head, int val)
-{
-    Node *newnode = new Node(val);
-    if (head == NULL)
-    {
-        head = newnode;
+int sz=0;
+void insert_tail(int val, Node* &head,Node *&tail){
+    sz++;
+    Node *newNode=new Node(val);
+    if(head == NULL){
+        head = newNode;
+        tail=newNode;
         return;
     }
-    Node *tmp = head;
-    while (tmp->next != NULL)
-    {
-        tmp = tmp->next;
-    }
-    tmp->next = newnode;
+    tail->next=newNode;
+    tail = newNode;
 }
-void middle_term(Node *head)
-{
-    int size = 0;
-    Node *tmp = head;
-    while (tmp != NULL)
+void printMiddle(Node *head){
+    if(sz%2==0)
     {
-        size++;
-        tmp = tmp->next;
-    }
-    if (size % 2 == 0)
-    {
-        int mid = size / 2;
-        Node *tmp_2 = head;
-        for (int i = 1; i < mid; i++)
+        Node *temp = head;
+        for (int i = 1; i < sz/2; i++)
         {
-            tmp_2 = tmp_2->next;
+            temp = temp->next;
         }
-        cout << tmp_2->val << " " << tmp_2->next->val;
+        cout<<temp->val<<" ";
+        cout<<temp->next->val<<endl;
     }
-    else
+    else if (sz%2!=0)
     {
-        int mid = (size / 2) + 1;
-        Node *tmp_2 = head;
-        for (int i = 1; i < mid; i++)
+        Node *temp = head;
+        for (int i = 0; i < sz/2; i++)
         {
-            tmp_2 = tmp_2->next;
+            temp = temp->next;
         }
-        cout << tmp_2->val << endl;
+        cout<<temp->val<<endl;
     }
+    
 }
 int main()
 {
     Node *head = NULL;
-    int val;
+    Node *tail = NULL;
     while (1)
     {
-        cin >> val;
-        if (val == -1)
-        {
-            break;
-        }
-        insert_value(head, val);
+        int n;cin>>n;
+        if(n==-1)break;
+        insert_tail(n,head,tail);
     }
-    middle_term(head);
+    printMiddle(head);
     return 0;
 }
