@@ -1,6 +1,10 @@
 #include <bits/stdc++.h>
+#define ll long long int
+#define pi pair<ll, ll>
 #define nl '\n'
 #define fast() ios_base::sync_with_stdio(0),cin.tie(0),cout.tie(0)
+const long long int INF = 1e18+5;
+const int N = 1e6 + 5;
 using namespace std;
 
 
@@ -13,29 +17,23 @@ int main()
     {
         cin>>ar[i];
     }
-    int ans_index;
-    int left_sum=0;
-    int right_sum=0;
-    for (int i = 0; i < n; i++)
+
+    //find prefix sum
+    int prefix_sum[n];
+    prefix_sum[0] = ar[0];
+    for (int i = 1; i < n; i++)
     {
-        ans_index=i+1;
-       for (int j = 0; j < n; j++)
-       {
-        if(j<ans_index){
-            left_sum += ar[j];
-        }
-        else if (j==ans_index)continue;
-        else
-        {
-            right_sum+=ar[j];
-        }
-       }
-       if(left_sum==right_sum)break;
-       else{
-        left_sum=0, right_sum=0;
+        prefix_sum[i] = prefix_sum[i-1]+ar[i];
+    }
+
+    //find equilibirium index
+    for(int i=1;i<n;i++) //o(n)
+    {
+       if(prefix_sum[i-1] == prefix_sum[n-1]-prefix_sum[i]){
+        cout<<i<<nl;
+        break;
        }
     }
-    cout<<ans_index<<nl;
     
     
 
